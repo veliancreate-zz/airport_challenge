@@ -1,6 +1,6 @@
-require './airport.rb'
-require './plane.rb'
-require './weather.rb'
+require 'airport.rb'
+require 'plane.rb'
+require 'weather.rb'
 
 # grand final
 # Given 6 planes, each plane must land. When the airport is full, every plane must take off again.
