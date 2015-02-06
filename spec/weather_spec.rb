@@ -1,6 +1,6 @@
 require 'weather'
 
-describe Weather 
+describe Weather do
 
   
 
