@@ -1,4 +1,5 @@
-require 'airport'
+require './lib/airport'
+require './lib/weather'
 
 describe Airport do
   
@@ -7,11 +8,10 @@ describe Airport do
   context 'taking off and landing' do
     
     it 'a plane can land' do
-      expect(airport.can_accept_plane?).to eq(true)
     end
     
     it 'a plane can take off' do
-      expect(airport.can_take_off?).to eq(true)
+
     end
 
     it 'has a capacity' do
@@ -35,12 +35,15 @@ describe Airport do
     
     context 'weather conditions' do
       
-      it 'a plane cannot take off when there is a storm brewing' do
-      end
-      
-      it 'a plane cannot land in the middle of a storm' do
-      end
-      
+      it 'the weather prob method returns a random number between 1 and 10' do
+        expect(airport.weather_prob).to satisfy{ |v|
+          v>=1 && v<=10
+        }
+
+      end  
+
     end
+    
   end
-end
+
+end  
