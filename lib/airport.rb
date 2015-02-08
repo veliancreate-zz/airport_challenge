@@ -23,11 +23,10 @@ class Airport
   
   end 
 
-  def plane_has_clearance?
+  def confirmed_weather
     
-    confirmed_weather = weather_test(self.weather_prob)#weather_test and weather_prob method in weather module
-    allow_or_deny_clearance(confirmed_weather)
-  
+    weather_test(self.weather_prob)#weather_test and weather_prob method in weather module
+    
   end  
 
   def allow_or_deny_clearance(weather)
@@ -40,6 +39,12 @@ class Airport
   
   end  
 
+  def plane_has_clearance?
+    
+    allow_or_deny_clearance(confirmed_weather)
+  
+  end  
+
   def plane_land(plane)
 
     if plane_has_clearance? == true
@@ -47,13 +52,13 @@ class Airport
         if plane.flying
           confirm_land(plane)
         else
-          puts "Plane cannot land because it is not flying!"  
+          raise "Plane cannot land because it is not flying!"  
         end    
       else
-        puts "Plane cannot land because capacity is full. Please wait until space becomes available."
+        raise "Plane cannot land because capacity is full."
       end    
     else
-      puts "Plane cannot land because the weather is stormy. Please try again."
+      raise "Plane cannot land because the weather is stormy. Please try again."
     end
 
   end      
@@ -65,13 +70,13 @@ class Airport
         if !empty?
           confirm_take_off(plane)
         else 
-          puts "A plane cant take off if there are no planes in the port."
+          raise "A plane cant take off if there are no planes in the port."
         end
       else
-        puts "This plane is already flying, so cant take off."
+        raise "This plane is already flying, so cant take off."
       end    
     else
-      puts "Plane cannot take off because the weather is stormy. Please try again."  
+      raise "Plane cannot take off because the weather is stormy. Please try again."  
     end
 
   end

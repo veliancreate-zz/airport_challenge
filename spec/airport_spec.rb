@@ -1,10 +1,20 @@
 require './lib/airport'
-require './lib/weather'
 
 describe Airport do
   
-  let(:airport) { Airport.new }
+  let(:airport) { Airport.new}
+  let(:airport_allow_clearance){double :airport, plane_has_clearance?: true, plane_land: nil}
+  let(:airport_deny_clearance){double :airport, plane_has_clearance?: false, plane_land: nil}
+  let(:plane) { double :plane, land!: true }
   
+  def fill_airport
+    20.times do airport.confirm_land(plane) end
+  end  
+
+  def empty_airport
+    airport.planes.clear
+  end  
+
   context 'taking off and landing' do
     
     it 'a plane can land' do
@@ -21,10 +31,26 @@ describe Airport do
   end
   
   context 'traffic control' do
-    
+
     it 'a plane cannot land if the airport is full' do
+
+      fill_airport
+
+      expect{airport.plane_land(plane)}.to raise_error(RuntimeError, "Plane cannot land because capacity is full.")
+       
+    end
+
+
+
+    it 'the airport can be empty' do
+
+      fill_airport
+      empty_airport
+      expect(airport.plane_count).to eq(0)
+    
     end
     
+
     # Include a weather condition using a module.
     # The weather must be random and only have two states "sunny" or "stormy".
     # Try and take off a plane, but if the weather is stormy, the plane can not take off and must remain in the airport.
@@ -36,9 +62,7 @@ describe Airport do
     context 'weather conditions' do
       
       it 'the weather prob method returns a random number between 1 and 10' do
-        expect(airport.weather_prob).to satisfy{ |v|
-          v>=1 && v<=10
-        }  
+        expect(airport.weather_prob).to satisfy{ |v| v>=1 && v<=10 }  
       end  
 
       it 'the weather can be stormy' do
