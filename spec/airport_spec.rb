@@ -38,12 +38,27 @@ describe Airport do
       it 'the weather prob method returns a random number between 1 and 10' do
         expect(airport.weather_prob).to satisfy{ |v|
           v>=1 && v<=10
-        }
-
+        }  
       end  
 
-    end
-    
-  end
+      it 'the weather can be stormy' do
+        n = 1
+        while n<4 do  
+          expect(airport.weather_test(n)).to eq('stormy')
+          n+=1
+        end    
+      end
 
-end  
+      it 'the weather can be sunny' do
+        n = 4
+        while n<10 do
+          expect(airport.weather_test(n)).to eq('sunny')
+          n+=1              
+        end
+      end  
+
+    end # weather conditions  
+  
+  end #trafiic contolr
+
+end #end Airport 
