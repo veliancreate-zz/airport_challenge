@@ -1,4 +1,4 @@
-require './lib/plane'
+require 'plane'
 
 # When we create a new plane, it should have a "flying" status, thus planes can not be created in the airport.
 #
@@ -10,14 +10,22 @@ describe Plane do
   let(:plane) { Plane.new }
   
   it 'has a flying status when created' do
+    expect(plane).to be_flying
   end
   
   it 'has a flying status when in the air' do
+    expect(plane.take_off!).to be_flying
   end
   
-  it 'can take off' do
+  it 'can land' do
+    expect(plane.land!).to_not be_flying
   end
   
-  it 'changes its status to flying after taking of' do
+  it 'changes its status to flying after taking off' do
+    plane.land!
+    expect {
+      plane.take_off!
+    }.to change(plane, :flying).from(false).to(true)  
   end
+
 end
