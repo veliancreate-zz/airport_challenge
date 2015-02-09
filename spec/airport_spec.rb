@@ -4,49 +4,55 @@ describe Airport do
   
   let(:airport) { Airport.new}
 
-  let(:plane_flying) { double :plane_flying, take_off!: false, land!: true, flying?: true }
+  let(:plane) { double :plane, take_off!: false, land!: true, flying?: true }
   
-  let(:plane_landed) { double :plane_landed, take_off!: true, land!: false, flying?: false }
-  
-  def fill_airport
-    
-    20.times { airport.confirm_land(plane_flying) }
-  
+  let(:plane_landed) { double :plane, take_off!: true, land!: false, flying?: true }
+
+  def fill_airport    
+    20.times { airport.confirm_land(plane) }
   end  
 
   def empty_airport
-    
     airport.planes.clear
-  
   end  
 
   def stormy_true
-
     allow(airport).to receive(:stormy?){true}
-
   end  
 
   def stormy_false
-
     allow(airport).to receive(:stormy?){false}
-
   end  
 
+  def land_plane
+    airport.confirm_land(plane)
+  end  
+
+  def take_off_plane
+    airport.confirm_take_off(plane)
+  end  
 
   context 'taking off and landing' do
     
     it 'a plane can land' do
-
+      empty_airport
+      expect{
+        land_plane}.to change{
+        airport.plane_count    
+      }.from(0).to(1)  
     end
     
     it 'a plane can take off' do
-
+      empty_airport
+      land_plane
+      expect{
+        take_off_plane}.to change{
+        airport.plane_count  
+      }.from(1).to(0)   
     end
 
     it 'has a capacity' do
-
       expect(airport.capacity).to eq(20)
-    
     end  
 
   end
@@ -57,7 +63,7 @@ describe Airport do
       
       stormy_false
       fill_airport
-      expect{airport.plane_land(plane_flying)}.to raise_error(RuntimeError, "Plane cannot land because capacity is full.") 
+      expect{airport.plane_land(plane)}.to raise_error(RuntimeError, "Plane cannot land because capacity is full.") 
       
     end
 
@@ -71,7 +77,7 @@ describe Airport do
     it 'a plane cannot land if the weather is stormy' do
       
       stormy_true
-      expect{airport.plane_land(plane_flying)}.to raise_error(RuntimeError, "Plane cannot land because the weather is stormy.")
+      expect{airport.plane_land(plane)}.to raise_error(RuntimeError, "Plane cannot land because the weather is stormy.")
 
     end
 
@@ -79,7 +85,8 @@ describe Airport do
 
       stormy_false
       empty_airport
-      expect{airport.confirm_land(plane_flying)}.to change{
+      expect{
+        airport.confirm_land(plane)}.to change{
         airport.plane_count  
       }.from(0).to(1)
 
