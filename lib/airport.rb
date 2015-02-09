@@ -42,7 +42,7 @@ class Airport
         raise "No planes are docked."
       end    
     else
-      raise "Plane cannot take off because the weather is stormy. Please try again."  
+      raise "Plane cannot take off because the weather is stormy."  
     end
 
   end

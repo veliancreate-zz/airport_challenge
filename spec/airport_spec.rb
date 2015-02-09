@@ -59,37 +59,43 @@ describe Airport do
   
   context 'traffic control' do
 
-    it 'a plane cannot land if the airport is full' do
-      
+    it 'a plane cannot land if the airport is full' do      
       stormy_false
       fill_airport
-      expect{airport.plane_land(plane)}.to raise_error(RuntimeError, "Plane cannot land because capacity is full.") 
-      
+      expect{airport.plane_land(plane)}.to raise_error(RuntimeError, "Plane cannot land because capacity is full.")       
     end
 
     it 'the airport can be empty' do
-
       empty_airport
       expect(airport.plane_count).to eq(0)
-    
     end
     
-    it 'a plane cannot land if the weather is stormy' do
-      
+    it 'a plane cannot land if the weather is stormy' do      
       stormy_true
       expect{airport.plane_land(plane)}.to raise_error(RuntimeError, "Plane cannot land because the weather is stormy.")
+    end
 
+    it 'a plane cannot take off if the weather is stormy' do
+      stormy_true
+      expect{airport.plane_take_off(plane)}.to raise_error(RuntimeError, "Plane cannot take off because the weather is stormy.")    
     end
 
     it 'a plane can land if the weather is sunny' do
-
       stormy_false
       empty_airport
       expect{
         airport.confirm_land(plane)}.to change{
         airport.plane_count  
       }.from(0).to(1)
+    end  
 
+    it 'a plane can take off if the weather is sunny' do
+      stormy_false
+      land_plane
+      expect{
+        airport.confirm_take_off(plane)}.to change{
+        airport.plane_count  
+      }.from(1).to(0)
     end  
 
     # Include a weather condition using a module.
