@@ -3,21 +3,40 @@ require './lib/airport'
 describe Airport do
   
   let(:airport) { Airport.new}
-  let(:airport_allow_clearance){double :airport, plane_has_clearance?: true, plane_land: nil}
-  let(:airport_deny_clearance){double :airport, plane_has_clearance?: false, plane_land: nil}
-  let(:plane) { double :plane, land!: true }
+
+  let(:plane_flying) { double :plane_flying, take_off!: false, land!: true, flying?: true }
+  
+  let(:plane_landed) { double :plane_landed, take_off!: true, land!: false, flying?: false }
   
   def fill_airport
-    20.times do airport.confirm_land(plane) end
+    
+    20.times { airport.confirm_land(plane_flying) }
+  
   end  
 
   def empty_airport
+    
     airport.planes.clear
+  
   end  
+
+  def stormy_true
+
+    allow(airport).to receive(:stormy?){true}
+
+  end  
+
+  def stormy_false
+
+    allow(airport).to receive(:stormy?){false}
+
+  end  
+
 
   context 'taking off and landing' do
     
     it 'a plane can land' do
+
     end
     
     it 'a plane can take off' do
@@ -25,7 +44,9 @@ describe Airport do
     end
 
     it 'has a capacity' do
+
       expect(airport.capacity).to eq(20)
+    
     end  
 
   end
@@ -33,23 +54,36 @@ describe Airport do
   context 'traffic control' do
 
     it 'a plane cannot land if the airport is full' do
-
+      
+      stormy_false
       fill_airport
-
-      expect{airport.plane_land(plane)}.to raise_error(RuntimeError, "Plane cannot land because capacity is full.")
-       
+      expect{airport.plane_land(plane_flying)}.to raise_error(RuntimeError, "Plane cannot land because capacity is full.") 
+      
     end
-
-
 
     it 'the airport can be empty' do
 
-      fill_airport
       empty_airport
       expect(airport.plane_count).to eq(0)
     
     end
     
+    it 'a plane cannot land if the weather is stormy' do
+      
+      stormy_true
+      expect{airport.plane_land(plane_flying)}.to raise_error(RuntimeError, "Plane cannot land because the weather is stormy.")
+
+    end
+
+    it 'a plane can land if the weather is sunny' do
+
+      stormy_false
+      empty_airport
+      expect{airport.confirm_land(plane_flying)}.to change{
+        airport.plane_count  
+      }.from(0).to(1)
+
+    end  
 
     # Include a weather condition using a module.
     # The weather must be random and only have two states "sunny" or "stormy".
@@ -60,25 +94,19 @@ describe Airport do
     # the plane can not land, and must not be in the airport
     
     context 'weather conditions' do
-      
-      it 'the weather prob method returns a random number between 1 and 10' do
-        expect(airport.weather_prob).to satisfy{ |v| v>=1 && v<=10 }  
-      end  
 
       it 'the weather can be stormy' do
-        n = 1
-        while n<4 do  
-          expect(airport.weather_test(n)).to eq('stormy')
-          n+=1
-        end    
+        
+        stormy_true
+        expect(airport).to be_stormy
+
       end
 
       it 'the weather can be sunny' do
-        n = 4
-        while n<10 do
-          expect(airport.weather_test(n)).to eq('sunny')
-          n+=1              
-        end
+
+        stormy_false
+        expect(airport).to_not be_stormy
+
       end  
 
     end # weather conditions  

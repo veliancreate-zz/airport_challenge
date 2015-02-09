@@ -1,5 +1,5 @@
-require_relative 'weather'
 require 'plane'
+require 'weather'
 
 class Airport
 
@@ -18,62 +18,30 @@ class Airport
   end 
 
   def planes
-
     @planes ||= []
-  
   end 
-
-  def confirmed_weather
-    
-    weather_test(self.weather_prob)#weather_test and weather_prob method in weather module
-    
-  end  
-
-  def allow_or_deny_clearance(weather)
-    
-    if weather == 'sunny'      
-      true
-    else
-      false
-    end    
-  
-  end  
-
-  def plane_has_clearance?
-    
-    allow_or_deny_clearance(confirmed_weather)
-  
-  end  
 
   def plane_land(plane)
 
-    if plane_has_clearance? == true
-      if !full? 
-        if plane.flying
-          confirm_land(plane)
-        else
-          raise "Plane cannot land because it is not flying!"  
-        end    
-      else
+    unless stormy?
+      unless full?
+        confirm_land(plane)
+      else  
         raise "Plane cannot land because capacity is full."
       end    
     else
-      raise "Plane cannot land because the weather is stormy. Please try again."
+      raise "Plane cannot land because the weather is stormy."
     end
 
   end      
 
   def plane_take_off(plane)
 
-    if plane_has_clearance? == true 
-      if !plane.flying
-        if !empty?
+    unless stormy?
+      unless empty?
           confirm_take_off(plane)
-        else 
-          raise "A plane cant take off if there are no planes in the port."
-        end
       else
-        raise "This plane is already flying, so cant take off."
+        raise "No planes are docked."
       end    
     else
       raise "Plane cannot take off because the weather is stormy. Please try again."  
@@ -82,25 +50,35 @@ class Airport
   end
 
   def confirm_land(plane)
+    
     plane.land!
     planes<<plane
+  
   end
   
   def confirm_take_off(plane)
+    
     plane.take_off!
     planes.delete(plane)
+  
   end  
 
   def plane_count
+    
     planes.count
+  
   end  
 
   def full?
+    
     planes.count==capacity
+  
   end  
 
   def empty?
+    
     planes.count==0
+  
   end  
 
 end
