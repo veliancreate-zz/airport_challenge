@@ -5,7 +5,7 @@ class Plane
   def initialize
     take_off!
   end
-  
+
   def take_off!
     @flying=true
     self
