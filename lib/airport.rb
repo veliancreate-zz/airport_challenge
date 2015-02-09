@@ -12,9 +12,7 @@ class Airport
   DEFAULT_CAPACITY = 20
 
   def initialize(options = {})
-
     @capacity = options.fetch(:capacity, DEFAULT_CAPACITY)
-
   end 
 
   def planes
@@ -49,36 +47,26 @@ class Airport
 
   end
 
-  def confirm_land(plane)
-    
+  def confirm_land(plane)  
     plane.land!
     planes<<plane
-  
   end
   
   def confirm_take_off(plane)
-    
     plane.take_off!
     planes.delete(plane)
-  
   end  
 
   def plane_count
-    
     planes.count
-  
   end  
 
-  def full?
-    
+  def full?    
     planes.count==capacity
-  
   end  
 
-  def empty?
-    
-    planes.count==0
-  
+  def empty?    
+    planes.count==0 
   end  
 
 end
