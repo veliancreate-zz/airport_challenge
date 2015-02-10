@@ -14,8 +14,7 @@ context 'grand finale' do
     end  
   end
 
-  it 'should land each plane' do
-
+  it 'should land each plane ' do
     create_planes
     planes.each do |p|
       while airport.plane_count != 6
@@ -29,20 +28,21 @@ context 'grand finale' do
     expect(airport.plane_count).to eq(6)
   end  
 
-  it 'each plane should have a landed status' do
-
-    planes.each do |p|
-      expect(p).to be_flying
+  it 'each plane should have a landed status after being landed' do  
+    create_planes
+    planes.each do |p|  
+      airport.confirm_land(p)
+      expect(p).to_not be_flying
     end  
-
   end  
 
-  it 'each plane should be able to take off' do
-
+  it 'each plane should be able to take off after being landed' do
+    create_planes
     planes.each do |p|
+      airport.confirm_land(p)
       while airport.plane_count !=0
         begin
-          airport.plane_land(p)
+          airport.plane_take_off(p)
         rescue
           next
         end
@@ -53,8 +53,11 @@ context 'grand finale' do
   end
 
   it 'each plane should have a flying status' do
+    create_planes
     planes.each do |p|
-      expect(p).to_not be_flying
+      airport.confirm_take_off(p)
+      expect(p).to be_flying
     end  
   end  
+
 end  
