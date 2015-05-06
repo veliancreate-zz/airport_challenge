@@ -2,7 +2,6 @@ require 'plane'
 require 'weather'
 
 class Airport
-
   include Weather
 
   attr_accessor :capacity
@@ -13,61 +12,63 @@ class Airport
 
   def initialize(options = {})
     @capacity = options.fetch(:capacity, DEFAULT_CAPACITY)
-  end 
+  end
 
   def planes
     @planes ||= []
-  end 
+  end
 
   def plane_land(plane)
-
-    unless stormy?
-      unless full?
-        confirm_land(plane)
-      else  
-        raise "Plane cannot land because capacity is full."
-      end    
+    if stormy?
+      fail 'Plane cannot land because the weather is stormy.'
     else
-      raise "Plane cannot land because the weather is stormy."
+      full_check(plane)
     end
+  end
 
-  end      
+  def full_check(plane)
+    if full?
+      fail 'Plane cannot land because capacity is full.'
+    else
+      confirm_land(plane)
+    end
+  end
 
   def plane_take_off(plane)
-
-    unless stormy?
-      unless empty?
-          confirm_take_off(plane)
-      else
-        raise "No planes are docked."
-      end    
+    if stormy?
+      fail 'Plane cannot take off because the weather is stormy.'
     else
-      raise "Plane cannot take off because the weather is stormy."  
+      empty_check(plane)
     end
-
   end
 
-  def confirm_land(plane)  
+  def empty_check(plane)
+    if empty?
+      fail 'No planes are docked.'
+    else
+      confirm_take_off(plane)
+    end
+  end
+
+  def confirm_land(plane)
     plane.land!
-    planes<<plane
+    planes << plane
   end
-  
+
   def confirm_take_off(plane)
     plane.take_off!
     planes.delete(plane)
-  end  
+  end
 
   def plane_count
     planes.count
-  end  
+  end
 
-  def full?    
-    planes.count==capacity
-  end  
+  def full?
+    planes.count == capacity
+  end
 
-  def empty?    
-    planes.count==0 
-  end  
-
+  def empty?
+    planes.count == 0
+  end
 end
-

@@ -1,0 +1,6 @@
+Documentation:
+  Enabled: false
+Style/MethodDefParentheses:
+  Enabled: false
+LineLength: 
+  Enabled: false  
