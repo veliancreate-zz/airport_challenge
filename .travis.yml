@@ -1,0 +1,7 @@
+language: ruby
+rvm:
+  - "2.2.0"
+env: 
+  - "test"
+install: 
+  - "bundle install"  
