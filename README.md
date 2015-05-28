@@ -1,3 +1,5 @@
+##[![Code Climate](https://codeclimate.com/github/veliancreate/airport_challenge/badges/gpa.svg)](https://codeclimate.com/github/veliancreate/airport_challenge)
+
 # airport_challenge
 1st week challenge at Makers Academy. Using Rspec to test an object oriented design
 
