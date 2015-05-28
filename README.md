@@ -1,4 +1,4 @@
-##[![Code Climate](https://codeclimate.com/github/veliancreate/airport_challenge/badges/gpa.svg)](https://codeclimate.com/github/veliancreate/airport_challenge)[Travis CI](https://travis-ci.org/veliancreate/airport_challenge.svg?branch=master)
+##[![Code Climate](https://codeclimate.com/github/veliancreate/airport_challenge/badges/gpa.svg)](https://codeclimate.com/github/veliancreate/airport_challenge)![Build Status](https://travis-ci.org/veliancreate/airport_challenge.svg?branch=master)
 
 
 # Airport Challenge
